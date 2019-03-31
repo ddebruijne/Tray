@@ -13,6 +13,7 @@ struct tray_menu {
   const char *text;
   int disabled;
   int checked;
+  int checkbox;
 
   void (*cb)(struct tray_menu *);
   void *context;
@@ -49,7 +50,7 @@ static GtkMenuShell *_tray_menu(struct tray_menu *m) {
         item = gtk_menu_item_new_with_label(m->text);
         gtk_menu_item_set_submenu(GTK_MENU_ITEM(item),
                                   GTK_WIDGET(_tray_menu(m->submenu)));
-      } else if (m->checked) {
+      } else if (m->checkbox) {
         item = gtk_check_menu_item_new_with_label(m->text);
         gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), !!m->checked);
       } else {
