@@ -50,7 +50,10 @@ file(GLOB src
 	${CMAKE_CURRENT_LIST_DIR}/*.png)
 
 add_executable(tray_example ${src})
-target_link_libraries(tray_example INTERFACE tray_base)
+target_link_libraries(tray_example INTERFACE tray)
+
+configure_file(${CMAKE_CURRENT_LIST_DIR}/icon.ico ${CMAKE_BINARY_DIR}/icon.ico COPYONLY)
+configure_file(${CMAKE_CURRENT_LIST_DIR}/icon.png ${CMAKE_BINARY_DIR}/icon.png COPYONLY)
 
 if(UNIX)
 	if(APPLE)
