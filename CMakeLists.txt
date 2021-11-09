@@ -21,37 +21,39 @@ add_library(tray_base INTERFACE)
 
 target_compile_features(tray_base INTERFACE c_std_99)
 
+file(GLOB src
+        ${CMAKE_CURRENT_LIST_DIR}/*.h
+        ${CMAKE_CURRENT_LIST_DIR}/*.ico
+        ${CMAKE_CURRENT_LIST_DIR}/*.png)
+
 if(WIN32)
 	include(WinApiLevels)
 	add_compile_definitions(TRAY_WINAPI=1)
+	list(APPEND src ${CMAKE_CURRENT_SOURCE_DIR}/tray_windows.c)
 else()
-    add_library(tray INTERFACE)
-	target_link_libraries(tray INTERFACE tray_base)
-
 	if(UNIX)
 		if(APPLE)
 			add_compile_definitions(TRAY_APPKIT=1)
 			find_library(COCOA Cocoa REQUIRED)
+			list(APPEND src ${CMAKE_CURRENT_SOURCE_DIR}/tray_darwin.m)
 		else()
 			FIND_PACKAGE(PkgConfig)
 			PKG_CHECK_MODULES(APPINDICATOR REQUIRED appindicator3-0.1)
 			ADD_DEFINITIONS(${APPINDICATOR_CFLAGS})
     	LINK_DIRECTORIES(${APPINDICATOR_LIBRARY_DIRS})
 			add_compile_definitions(TRAY_APPINDICATOR=1)
+			list(APPEND src ${CMAKE_CURRENT_SOURCE_DIR}/tray_windows.c)
 		endif()
 	endif()
 endif()
 
+add_library(tray STATIC ${src})
+target_link_libraries(tray INTERFACE tray_base)
+
 add_library(tray::tray ALIAS tray)
 
-file(GLOB src
-	${CMAKE_CURRENT_LIST_DIR}/*.c
-	${CMAKE_CURRENT_LIST_DIR}/*.h
-	${CMAKE_CURRENT_LIST_DIR}/*.ico
-	${CMAKE_CURRENT_LIST_DIR}/*.png)
-
-add_executable(tray_example ${src})
-target_link_libraries(tray_example tray)
+add_executable(tray_example ${CMAKE_CURRENT_SOURCE_DIR}/example.c)
+target_link_libraries(tray_example tray::tray)
 
 configure_file(${CMAKE_CURRENT_LIST_DIR}/icon.ico ${CMAKE_BINARY_DIR}/icon.ico COPYONLY)
 configure_file(${CMAKE_CURRENT_LIST_DIR}/icon.png ${CMAKE_BINARY_DIR}/icon.png COPYONLY)
