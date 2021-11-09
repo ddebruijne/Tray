@@ -1,5 +1,6 @@
-Tray
-----
+# Cross-platform Linux/Windows/MacOS Tray
+
+<img src="screenshot.png">
 
 Cross-platform, single header, super tiny C99 implementation of a system tray icon with a popup menu.
 
@@ -11,94 +12,34 @@ Works well on:
 
 The code is C++ friendly and will compile fine in C++98 and up.
 
-# Setup
+This fork is intended to bring together the [original work of Serge Zaitsev](https://github.com/zserge/tray) and the most interesting forks and PRs of respectable contributors:
 
-Before you can compile `tray`, you'll need to add an environment definition before the line where you include `tray.h`. 
+* [Only process messages coming from the tray window on Windows](https://github.com/zserge/tray/pull/18)
+* [Become C++-friendly](https://github.com/zserge/tray/pull/16)
+* [Fix all menu items have a check box](https://github.com/zserge/tray/pull/11)
+* [Add support for tooltip](https://github.com/zserge/tray/pull/11)
+* Darwin implementation translated from C to Objective C adapted from [@trevex fork](https://github.com/trevex/tray)
 
-**For Windows:**
-```c
-#include <stdio.h>
-#include <string.h>
-
-#define TRAY_WINAPI
-
-#include "tray.h"
-...
-```
-
-**For Linux:**
-```c
-#include <stdio.h>
-#include <string.h>
-
-#define TRAY_APPINDICATOR
-
-#include "tray.h"
-...
-```
-
-**For Mac:**
-```c
-#include <stdio.h>
-#include <string.h>
-
-#define TRAY_APPKIT
-
-#include "tray.h"
-...
-```
-
-Failure to define one of the three above will result in a compile-time error.
-
-# Demo
-
-The included example `.c` files can be compiled based on your environment.
-
-For example, to compile and run the program on Windows: 
-
-```shell
-$> gcc example_windows.c [Enter]
-``` 
-
-This will compile and build `a.out`. To run it: 
+## Building
 
 ```
-$> a [Enter]
+mkdir build
+cd build
+cmake ..
 ```
 
-# Example
+* On Linux/MacOS run the resulting Makefile with `make`
+* On Windows build the resulting Visual Studio solution
 
-```c
-struct tray_menu menus[] = {
-	{ "Toggle me", 0, 0, toggle_cb, NULL },
-	{ "-"        , 0, 0, NULL     , NULL },
-	{ "Quit"     , 0, 0, quit_cb  , NULL },
-	{ NULL       , 0, 0, NULL     , NULL }
-};
+## Demo
 
-struct tray tray = {
-    .icon = "icon.png",
-    .menu = menus,
-};
-
-void toggle_cb(struct tray_menu *item) {
-	item->checked = !item->checked;
-	tray_update(&tray);
-}
-
-void quit_cb(struct tray_menu *item) {
-  tray_exit();
-}
-
-...
-
-tray_init(&tray);
-while (tray_loop(1) == 0);
-tray_exit();
+Execute the `tray_example` application:
 
 ```
+./tray_example
+```
 
-# API
+## API
 
 Tray structure defines an icon and a menu.
 Menu is a NULL-terminated array of items.
@@ -132,18 +73,6 @@ All functions are meant to be called from the UI thread only.
 
 Menu arrays must be terminated with a NULL item, e.g. the last item in the
 array must have text field set to NULL.
-
-## Roadmap
-
-* [x] Cross-platform tray icon
-* [x] Cross-platform tray popup menu
-* [x] Separators in the menu
-* [x] Disabled/enabled menu items
-* [x] Checked/unchecked menu items
-* [x] Nested menus
-* [ ] Icons for menu items
-* [x] Rewrite ObjC code in C using ObjC Runtime (now ObjC code breaks many linters and static analyzers)
-* [ ] Call GTK code using dlopen/dlsym (to make binaries run safely if Gtk libraries are not available)
 
 ## License
 
