@@ -1,50 +1,50 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.12)
+cmake_minimum_required(VERSION 3.13 FATAL_ERROR) # target_link_directories
 
-if(DEFINED PROJECT_NAME)
-  set(subproject ON)
-else()
-  set(subproject OFF)
-endif()
+project(tray C)
 
-PROJECT(tray C)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-
+# Generate 'compile_commands.json' for clang_complete
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-IF(WIN32)
-	SET(CMAKE_CXX_FLAGS_RELEASE "/MT")
-	SET(CMAKE_CXX_FLAGS_DEBUG "/MTd")
-ENDIF()
-
-file(GLOB src
+file(GLOB SRCS
         ${CMAKE_CURRENT_LIST_DIR}/*.h
         ${CMAKE_CURRENT_LIST_DIR}/*.ico
         ${CMAKE_CURRENT_LIST_DIR}/*.png)
 
 if(WIN32)
-	include(WinApiLevels)
-	add_compile_definitions(TRAY_WINAPI=1)
-	list(APPEND src ${CMAKE_CURRENT_SOURCE_DIR}/tray_windows.c)
+	list(APPEND SRCS ${CMAKE_CURRENT_SOURCE_DIR}/tray_windows.c)
 else()
 	if(UNIX)
 		if(APPLE)
-			add_compile_definitions(TRAY_APPKIT=1)
 			find_library(COCOA Cocoa REQUIRED)
-			list(APPEND src ${CMAKE_CURRENT_SOURCE_DIR}/tray_darwin.m)
+			list(APPEND SRCS ${CMAKE_CURRENT_SOURCE_DIR}/tray_darwin.m)
 		else()
 			FIND_PACKAGE(PkgConfig)
 			PKG_CHECK_MODULES(APPINDICATOR REQUIRED appindicator3-0.1)
-			ADD_DEFINITIONS(${APPINDICATOR_CFLAGS})
-    	LINK_DIRECTORIES(${APPINDICATOR_LIBRARY_DIRS})
-			add_compile_definitions(TRAY_APPINDICATOR=1)
-			list(APPEND src ${CMAKE_CURRENT_SOURCE_DIR}/tray_linux.c)
+			list(APPEND SRCS ${CMAKE_CURRENT_SOURCE_DIR}/tray_linux.c)
 		endif()
 	endif()
 endif()
 
-add_library(tray STATIC ${src})
+add_library(tray STATIC ${SRCS})
 set_property(TARGET tray PROPERTY C_STANDARD 99)
+if(WIN32)
+	target_compile_definitions(tray PRIVATE TRAY_WINAPI=1 WIN32_LEAN_AND_MEAN NOMINMAX)
+	target_compile_options(tray PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+else()
+        if(UNIX)
+                if(APPLE)
+			target_compile_definitions(tray PRIVATE TRAY_APPKIT=1)
+			target_link_libraries(tray PRIVATE ${COCOA})
+                else()
+			target_compile_options(tray PRIVATE ${APPINDICATOR_CFLAGS})
+			target_link_directories(tray PRIVATE ${APPINDICATOR_LIBRARY_DIRS})
+			target_compile_definitions(tray PRIVATE TRAY_APPINDICATOR=1)
+			target_link_libraries(tray PRIVATE ${APPINDICATOR_LIBRARIES})
+                endif()
+        endif()
+endif()
 
 add_library(tray::tray ALIAS tray)
 
@@ -54,16 +54,9 @@ target_link_libraries(tray_example tray::tray)
 configure_file(${CMAKE_CURRENT_LIST_DIR}/icon.ico ${CMAKE_BINARY_DIR}/icon.ico COPYONLY)
 configure_file(${CMAKE_CURRENT_LIST_DIR}/icon.png ${CMAKE_BINARY_DIR}/icon.png COPYONLY)
 
-if(UNIX)
-	if(APPLE)
-		target_link_libraries(tray_example ${COCOA})
-	else()
-		target_link_libraries(tray_example ${APPINDICATOR_LIBRARIES})
-	endif()
-endif()
-
-INSTALL(TARGETS tray DESTINATION lib)
+INSTALL(TARGETS tray tray DESTINATION lib)
 
 IF(NOT WIN32)
 	INSTALL(FILES tray.h DESTINATION include)
 ENDIF()
+
