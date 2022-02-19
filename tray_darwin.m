@@ -73,7 +73,7 @@ void tray_update(struct tray *tray) {
     [statusItem setMenu:_tray_menu(tray->menu)];
 }
 
-void tray_exit() {
+void tray_exit(void) {
     [app terminate:app];
 }
 

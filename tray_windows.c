@@ -109,7 +109,7 @@ static int tray_init(struct tray *tray) {
   return 0;
 }
 
-static int tray_loop(int blocking) {
+int tray_loop(int blocking) {
   MSG msg;
   if (blocking) {
     GetMessage(&msg, hwnd, 0, 0);
@@ -124,7 +124,7 @@ static int tray_loop(int blocking) {
   return 0;
 }
 
-static void tray_update(struct tray *tray) {
+void tray_update(struct tray *tray) {
   HMENU prevmenu = hmenu;
   UINT id = ID_TRAY_FIRST;
   hmenu = _tray_menu(tray->menu, &id);
@@ -146,7 +146,7 @@ static void tray_update(struct tray *tray) {
   }
 }
 
-static void tray_exit() {
+void tray_exit(void) {
   Shell_NotifyIcon(NIM_DELETE, &nid);
   if (nid.hIcon != 0) {
     DestroyIcon(nid.hIcon);

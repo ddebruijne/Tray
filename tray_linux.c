@@ -64,5 +64,5 @@ void tray_update(struct tray *tray) {
   app_indicator_set_menu(indicator, GTK_MENU(_tray_menu(tray->menu)));
 }
 
-void tray_exit() { loop_result = -1; }
+void tray_exit(void) { loop_result = -1; }
 
