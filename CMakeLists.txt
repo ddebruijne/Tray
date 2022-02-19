@@ -6,7 +6,7 @@ else()
   set(subproject OFF)
 endif()
 
-PROJECT(tray C CXX)
+PROJECT(tray C)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
@@ -16,10 +16,6 @@ IF(WIN32)
 	SET(CMAKE_CXX_FLAGS_RELEASE "/MT")
 	SET(CMAKE_CXX_FLAGS_DEBUG "/MTd")
 ENDIF()
-
-add_library(tray_base INTERFACE)
-
-target_compile_features(tray_base INTERFACE c_std_99)
 
 file(GLOB src
         ${CMAKE_CURRENT_LIST_DIR}/*.h
@@ -48,7 +44,7 @@ else()
 endif()
 
 add_library(tray STATIC ${src})
-target_link_libraries(tray INTERFACE tray_base)
+set_property(TARGET tray PROPERTY C_STANDARD 99)
 
 add_library(tray::tray ALIAS tray)
 
