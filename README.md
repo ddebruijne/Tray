@@ -22,6 +22,14 @@ This fork is intended to bring together the [original work of Serge Zaitsev](htt
 * [Add support for tooltip](https://github.com/zserge/tray/pull/11)
 * Darwin implementation translated from C to Objective C adapted from [@trevex fork](https://github.com/trevex/tray)
 
+## Prerequisites
+
+Linux:
+
+```
+sudo apt install libappindicator3-dev
+```
+
 ## Building
 
 ```
