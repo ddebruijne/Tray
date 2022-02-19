@@ -4,6 +4,8 @@
 
 <img src="screenshot_windows.png">
 
+<img src="screenshot_linux.png">
+
 Cross-platform, super tiny C99 implementation of a system tray icon with a popup menu.
 
 Works well on:
