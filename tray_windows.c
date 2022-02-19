@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <shellapi.h>
+#include "tray.h"
 
 #define WM_TRAY_CALLBACK_MESSAGE (WM_USER + 1)
 #define WC_TRAY_CLASS_NAME "TRAY"
@@ -81,7 +82,7 @@ static HMENU _tray_menu(struct tray_menu *m, UINT *id) {
   return hmenu;
 }
 
-static int tray_init(struct tray *tray) {
+int tray_init(struct tray *tray) {
   memset(&wc, 0, sizeof(wc));
   wc.cbSize = sizeof(WNDCLASSEX);
   wc.lpfnWndProc = _tray_wnd_proc;
