@@ -62,6 +62,8 @@ if(UNIX)
 	endif()
 endif()
 
+INSTALL(TARGETS tray DESTINATION lib)
+
 IF(NOT WIN32)
 	INSTALL(FILES tray.h DESTINATION include)
 ENDIF()
