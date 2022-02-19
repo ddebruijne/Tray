@@ -26,7 +26,9 @@ This fork is intended to bring together the [original work of Serge Zaitsev](htt
 
 ## Prerequisites
 
-Linux:
+* CMake
+* [Ninja](https://ninja-build.org/), in order to have the same build commands on all platforms
+* AppIndicator on Linux:
 
 ```
 sudo apt install libappindicator3-dev
@@ -37,11 +39,9 @@ sudo apt install libappindicator3-dev
 ```
 mkdir build
 cd build
-cmake ..
+cmake -G Ninja ..
+ninja
 ```
-
-* On Linux/MacOS run the resulting Makefile with `make`
-* On Windows build the resulting Visual Studio solution
 
 ## Demo
 
