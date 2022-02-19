@@ -1,6 +1,8 @@
 # Cross-platform Linux/Windows/MacOS Tray
 
-<img src="screenshot.png">
+<img src="screenshot_macosx.png">
+
+<img src="screenshot_windows.png">
 
 Cross-platform, single header, super tiny C99 implementation of a system tray icon with a popup menu.
 
