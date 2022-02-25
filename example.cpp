@@ -8,11 +8,19 @@ TrayIcon tr = { "icon.png", "icon.ico", "Hola!", menu };
 
 int main()
 {
-	TrayMenu comPorts = { "COM ports", true, false, false, nullptr };
+	TrayMenu comPorts = { "Serial Port", true, false, false, nullptr };
 	for(int i = 0; i < 5; i++) {
 		std::string comname = "COM";
 		comname += (char)(i + '0');
 		comPorts.subMenu.push_back(new TrayMenu { comname, true, false, false, [&](TrayMenu* tm){ 
+			for (TrayMenu* t : comPorts.subMenu)
+			{
+				t->isChecked = false;
+			}
+
+			tm->isChecked = true;
+
+			trayMaker.Update();
 		} });
 	}
 
