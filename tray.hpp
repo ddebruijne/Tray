@@ -20,8 +20,9 @@ namespace Tray
 
 	struct TrayIcon
 	{
-		std::string iconPath = "";
-		std::string tooltip = "";
+		std::string iconPathPng = "";	// OSX
+		std::string iconPathIco = "";	// Windows
+		std::string tooltip = "";		// Only used on Windows, hover tooltip
 
 		std::vector<TrayMenu*> menu;
 	};
@@ -37,6 +38,8 @@ namespace Tray
 		void Update();
 		void Exit();
 	};
+
+	static TrayMaker trayMaker;
 }
 
 

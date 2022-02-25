@@ -1,3 +1,9 @@
+/*
+    ------------------------------------
+        This file needs porting still
+    ------------------------------------
+*/
+
 #include <gtk/gtk.h>
 #include <libappindicator/app-indicator.h>
 #include "tray.h"

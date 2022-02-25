@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.13 FATAL_ERROR) # target_link_directories
 
-project(tray C)
+project(tray CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
@@ -14,7 +17,7 @@ file(GLOB SRCS
         ${CMAKE_CURRENT_LIST_DIR}/*.png)
 
 if(WIN32)
-	list(APPEND SRCS ${CMAKE_CURRENT_SOURCE_DIR}/tray_windows.c)
+	list(APPEND SRCS ${CMAKE_CURRENT_SOURCE_DIR}/tray_windows.cpp)
 else()
 	if(UNIX)
 		if(APPLE)
@@ -32,7 +35,7 @@ add_library(tray STATIC ${SRCS})
 set_property(TARGET tray PROPERTY C_STANDARD 99)
 if(WIN32)
 	target_compile_definitions(tray PRIVATE TRAY_WINAPI=1 WIN32_LEAN_AND_MEAN NOMINMAX)
-	target_compile_options(tray PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+	#target_compile_options(tray PRIVATE "/MT$<$<CONFIG:Debug>:d>")
 else()
         if(UNIX)
                 if(APPLE)
