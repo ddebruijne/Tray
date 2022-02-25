@@ -1,5 +1,11 @@
 # Cross-platform Linux/Windows/MacOS Tray
 
+NOTE: port of https://github.com/dmikushin/tray to c++
+
+<br><br>
+# Old README.md
+
+
 <img src="screenshot_macosx.png">
 
 <img src="screenshot_windows.png">

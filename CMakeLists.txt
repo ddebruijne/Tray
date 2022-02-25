@@ -8,6 +8,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 file(GLOB SRCS
+		${CMAKE_CURRENT_LIST_DIR}/*.hpp
         ${CMAKE_CURRENT_LIST_DIR}/*.h
         ${CMAKE_CURRENT_LIST_DIR}/*.ico
         ${CMAKE_CURRENT_LIST_DIR}/*.png)
@@ -18,7 +19,7 @@ else()
 	if(UNIX)
 		if(APPLE)
 			find_library(COCOA Cocoa REQUIRED)
-			list(APPEND SRCS ${CMAKE_CURRENT_SOURCE_DIR}/tray_darwin.m)
+			list(APPEND SRCS ${CMAKE_CURRENT_SOURCE_DIR}/tray_darwin.mm)
 		else()
 			FIND_PACKAGE(PkgConfig)
 			PKG_CHECK_MODULES(APPINDICATOR REQUIRED appindicator3-0.1)
@@ -48,7 +49,7 @@ endif()
 
 add_library(tray::tray ALIAS tray)
 
-add_executable(tray_example ${CMAKE_CURRENT_SOURCE_DIR}/example.c)
+add_executable(tray_example ${CMAKE_CURRENT_SOURCE_DIR}/example.cpp)
 target_link_libraries(tray_example tray::tray)
 
 configure_file(${CMAKE_CURRENT_LIST_DIR}/icon.ico ${CMAKE_BINARY_DIR}/icon.ico COPYONLY)
@@ -57,6 +58,6 @@ configure_file(${CMAKE_CURRENT_LIST_DIR}/icon.png ${CMAKE_BINARY_DIR}/icon.png C
 INSTALL(TARGETS tray tray DESTINATION lib)
 
 IF(NOT WIN32)
-	INSTALL(FILES tray.h DESTINATION include)
+	INSTALL(FILES tray.hpp DESTINATION include)
 ENDIF()
 
