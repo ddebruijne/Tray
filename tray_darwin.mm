@@ -5,6 +5,7 @@ using namespace Tray;
 static NSApplication* app;
 static NSStatusBar* statusBar;
 static NSStatusItem* statusItem;
+bool wantsExit = false;
 
 @interface AppDelegate: NSObject <NSApplicationDelegate>
     - (IBAction)menuCallback:(id)sender;
@@ -69,7 +70,8 @@ bool TrayMaker::Loop(bool blocking)
     if (event) {
         [app sendEvent:event];
     }
-	return true;
+
+	return !wantsExit;
 }
 
 void TrayMaker::Update()
@@ -83,5 +85,5 @@ void TrayMaker::Update()
 
 void TrayMaker::Exit()
 {
-	[app terminate:app];
+    wantsExit = true;
 }
