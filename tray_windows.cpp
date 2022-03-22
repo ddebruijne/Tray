@@ -150,7 +150,7 @@ void TrayMaker::Update()
 	SendMessage(hwnd, WM_INITMENUPOPUP, (WPARAM)hmenu, 0);
 
 	HICON icon;
-	ExtractIconEx(trayIcon->iconPathIco.c_str(), 0, NULL, &icon, 1);
+	ExtractIconEx(trayIcon->iconFileIco.c_str(), 0, NULL, &icon, 1);
 	if (nid.hIcon) 
 		DestroyIcon(nid.hIcon);
 	nid.hIcon = icon;

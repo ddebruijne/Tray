@@ -12,7 +12,7 @@ namespace Tray
 		std::string text = "";
 		bool isEnabled = true;
 		bool isChecked = false;
-		bool hasCheckbox = false;
+		bool hasCheckbox = false;		// Only used with linux/libAppIndicator. Whether the entry even has a checkbox
 
 		std::function<void(TrayMenu*)> onClicked = nullptr;
 		std::vector<TrayMenu*> subMenu;
@@ -20,8 +20,8 @@ namespace Tray
 
 	struct TrayIcon
 	{
-		std::string iconPathPng = "";	// OSX
-		std::string iconPathIco = "";	// Windows
+		std::string iconFilePng = "";	// OSX, Linux. File name of icon (same folder as execution dir)
+		std::string iconFileIco = "";	// Windows. File name of icon (same folder as execution dir)
 		std::string tooltip = "";		// Only used on Windows, hover tooltip
 
 		std::vector<TrayMenu*> menu;

@@ -76,7 +76,9 @@ bool TrayMaker::Loop(bool blocking)
 
 void TrayMaker::Update()
 {
-    NSImage *image = [[NSImage alloc] initWithContentsOfFile:[NSString stringWithUTF8String:trayIcon->iconPathPng.c_str()]];
+    NSString* pngPath = [NSString stringWithCString:trayIcon->iconFilePng.c_str() encoding:[NSString defaultCStringEncoding]];
+    NSString* bundlePathIcon = [[NSBundle mainBundle] pathForResource:pngPath ofType:@"png"];
+    NSImage* image = [[NSImage alloc] initWithContentsOfFile:bundlePathIcon];
     NSSize size = NSMakeSize(16, 16);
     [image setSize:NSMakeSize(16, 16)];
     statusItem.button.image = image;

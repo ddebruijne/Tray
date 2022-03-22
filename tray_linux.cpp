@@ -61,7 +61,7 @@ bool TrayMaker::Initialize(TrayIcon* toInitialize)
 	if (gtk_init_check(0, NULL) == FALSE)
 		return false;
 
-	indicator = app_indicator_new(TRAY_APPINDICATOR_ID, toInitialize->iconPathPng.c_str(), APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
+	indicator = app_indicator_new(TRAY_APPINDICATOR_ID, toInitialize->iconFilePng.c_str(), APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
 	app_indicator_set_status(indicator, APP_INDICATOR_STATUS_ACTIVE);
 
 	trayIcon = toInitialize;
@@ -78,7 +78,7 @@ bool TrayMaker::Loop(bool blocking)
 
 void TrayMaker::Update()
 {
-	app_indicator_set_icon(indicator, trayIcon->iconPathPng.c_str());
+	app_indicator_set_icon(indicator, trayIcon->iconFilePng.c_str());
 	// GTK is all about reference counting, so previous menu should be destroyed
 	// here
 	app_indicator_set_menu(indicator, GTK_MENU(_tray_menu(trayIcon->menu)));
