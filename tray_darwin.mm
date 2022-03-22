@@ -76,7 +76,7 @@ bool TrayMaker::Loop(bool blocking)
 
 void TrayMaker::Update()
 {
-    NSString* pngPath = [NSString stringWithCString:trayIcon->iconFilePng.c_str() encoding:[NSString defaultCStringEncoding]];
+    NSString* pngPath = [NSString stringWithCString:trayIcon->iconFilePng.substr(0, trayIcon->iconFilePng.length()-4).c_str() encoding:[NSString defaultCStringEncoding]];
     NSString* bundlePathIcon = [[NSBundle mainBundle] pathForResource:pngPath ofType:@"png"];
     NSImage* image = [[NSImage alloc] initWithContentsOfFile:bundlePathIcon];
     NSSize size = NSMakeSize(16, 16);
